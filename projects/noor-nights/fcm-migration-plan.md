@@ -4,6 +4,16 @@
 **Created:** 2026-05-18  
 **Goal:** Replace OneSignal with Firebase Cloud Messaging (FCM) for reliable push notifications on web and Android, then publish the app on Google Play via Trusted Web Activity (TWA).
 
+### Technical Decisions (AgDRs)
+
+| Decision | AgDR |
+|----------|------|
+| Replace OneSignal with FCM | [AgDR-0001](agdrs/AgDR-0001-fcm-over-onesignal.md) |
+| Cloudflare Worker as FCM topic-subscription proxy | [AgDR-0002](agdrs/AgDR-0002-cloudflare-worker-fcm-proxy.md) |
+| FCM Topics as the fan-out model (vs. token database) | [AgDR-0003](agdrs/AgDR-0003-fcm-topics-fan-out.md) |
+| Trusted Web Activity (TWA) for Google Play | [AgDR-0004](agdrs/AgDR-0004-twa-for-google-play.md) |
+| `google-auth-library` as OAuth2 client in GitHub Actions | [AgDR-0005](agdrs/AgDR-0005-google-auth-library-oauth2.md) |
+
 ---
 
 ## Background
@@ -546,6 +556,7 @@ Phases 2, 3, and 4 can be developed and tested independently. Phase 5 can be mer
 | TWA verification fails (assetlinks.json) | Medium | Use `adb logcat` or [Digital Asset Links tester](https://developers.google.com/digital-asset-links/tools/generator) to debug |
 | Keystore lost | High impact | Store keystore + password in a password manager immediately after creation |
 | OneSignal subscribers don't migrate | Expected | Existing OneSignal subscribers need to re-subscribe via the new FCM button; consider a one-time email/in-app notice |
+| FCM IID API (Phase 2) is a legacy/deprecated Google API | Medium | Google has not announced a shutdown date, but the replacement is the FCM HTTP v1 instance management API (in beta). Monitor announcements; migration path exists if IID is deprecated. See [AgDR-0002](agdrs/AgDR-0002-cloudflare-worker-fcm-proxy.md). |
 
 ---
 
